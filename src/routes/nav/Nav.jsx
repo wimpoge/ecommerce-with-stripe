@@ -4,14 +4,15 @@ import { ReactComponent as Logo } from '../../assets/crown.svg'
 import { useContext } from "react"
 import { UserContext } from "../../context/user"
 import { signOutUser } from "../../utils/firebase/firebase"
+import CartIcon from "../../components/cart-icon/cart-icon"
+import CartDropdown from "../../components/cart-dropdown/cart-dropdown"
+import { CartContext } from "../../context/cart"
 
 const Nav = () => {
-    const { currentUser, setCurrentUser } = useContext(UserContext)
+    const { currentUser } = useContext(UserContext)
+    const { isCartOpen } = useContext(CartContext)
 
-    const signOutHandler = async () => {
-        await signOutUser()
-        setCurrentUser(null)
-    }
+
 
     return (
         <>
@@ -23,16 +24,16 @@ const Nav = () => {
                     <Link to='/shop' className='nav-link'>
                         SHOP
                     </Link>
-                    {
-                        currentUser ? (
-                            <span className="nav-link" onClick={signOutHandler}>SIGN OUT</span>
-                        ) : (
-                            <Link to='/auth' className='nav-link'>
-                                SIGN IN
-                            </Link>
-                        )
-                    }
+                    {currentUser ? (
+                        <span className="nav-link" onClick={signOutUser}>SIGN OUT</span>
+                    ) : (
+                        <Link to='/auth' className='nav-link'>
+                            SIGN IN
+                        </Link>
+                    )}
+                    <CartIcon />
                 </div>
+                {isCartOpen && <CartDropdown />}
             </div>
             <Outlet />
         </>
