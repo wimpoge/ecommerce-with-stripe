@@ -1,12 +1,13 @@
 import { Link, Outlet } from "react-router-dom"
-import './navigation.styles.scss'
+// import './navigation.styles.scss'
 import { ReactComponent as Logo } from '../../assets/crown.svg'
 import { useContext } from "react"
 import { UserContext } from "../../context/user"
-import { signOutUser } from "../../utils/firebase/firebase"
+import { signOutUser } from "../../utils/firebase"
 import CartIcon from "../../components/cart-icon/cart-icon"
 import CartDropdown from "../../components/cart-dropdown/cart-dropdown"
 import { CartContext } from "../../context/cart"
+import { LogoContainer, NavigationContainer, NavLink, NavLinks } from "./navigation.styles"
 
 const Nav = () => {
     const { currentUser } = useContext(UserContext)
@@ -16,25 +17,25 @@ const Nav = () => {
 
     return (
         <>
-            <div className="navigation">
-                <Link className="logo-container" to='/'>
+            <NavigationContainer>
+                <LogoContainer to='/'>
                     <Logo className="logo" />
-                </Link>
-                <div className="nav-links-container">
-                    <Link to='/shop' className='nav-link'>
+                </LogoContainer>
+                <NavLinks>
+                    <NavLink to='/shop'>
                         SHOP
-                    </Link>
+                    </NavLink>
                     {currentUser ? (
-                        <span className="nav-link" onClick={signOutUser}>SIGN OUT</span>
+                        <NavLink as='span' onClick={signOutUser}>SIGN OUT</NavLink>
                     ) : (
-                        <Link to='/auth' className='nav-link'>
+                        <NavLink to='/auth'>
                             SIGN IN
-                        </Link>
+                        </NavLink>
                     )}
                     <CartIcon />
-                </div>
+                </NavLinks>
                 {isCartOpen && <CartDropdown />}
-            </div>
+            </NavigationContainer>
             <Outlet />
         </>
     )
